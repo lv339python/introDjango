@@ -17,7 +17,8 @@ from django.urls import path, include
 
 urlpatterns = [
     path('info/', include('info.urls')),
-    path('map/', include('map.urls'))
+    path('map/', include('map.urls')),
+    path('user/', include('user.urls')),
 ]
 
 # from info.views import info, info_boo
