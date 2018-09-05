@@ -4,14 +4,13 @@ from .models import User
 def get_user(request, user_id=None):
     print(user_id)
     if user_id:
-        try:
-            user = User.objects.get(pk=int(user_id))
-        except:
-            user = User()
-        return JsonResponse(user.to_dict())
+        user = User.get_by_id(user_id)
+        if user:
+            return JsonResponse(user.to_dict(), status=200)
+        return JsonResponse({}, status=400)
 
-    users = User.objects.all()
+    users = User.objects.all()[:30]
     print(type(users))
     users = [user.to_dict() for user in users]
-    return JsonResponse()
+    return JsonResponse(users, safe=False)
 

@@ -11,5 +11,11 @@ class User(models.Model):
             "email": self.email,
             "pass": self.pasword
         }
+    @staticmethod
+    def get_by_id(user_id):
+        try:
+            return User.objects.get(pk=user_id)
+        except:
+            pass
 
 
