@@ -12,6 +12,7 @@ class UserProfile(models.Model):
 
     def to_dict(self):
         return {
+            'id': self.id,
             'fname': self.fname,
             'lname': self.lname,
             'age': self.age
