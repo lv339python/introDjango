@@ -1,7 +1,10 @@
 import json
 
-from django.http import JsonResponse
 
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.views import View
+
+from helpers.validators import profile_data_validator
 from user.models import User
 from user_profile.models import UserProfile
 
@@ -60,3 +63,34 @@ def create_profile(request):
 
 
     return JsonResponse({}, status=400)
+
+
+class ProfileView(View):
+    def get(self, request, user_id=None, profile_id=None):
+
+        profile = UserProfile.get_by_id(profile_id)
+        if profile:
+            return JsonResponse(profile.to_dict())
+        return JsonResponse({}, status=400)
+    def post(self, request):
+        data = json.loads(request.body)
+        user = User.get_by_id(data['user_id'])
+        if user:
+            profile = UserProfile.create(**data)
+            if profile:
+                return JsonResponse(profile.to_dict(), status=201)
+            return HttpResponseBadRequest()
+        return JsonResponse({"msg": "user no found"}, status=400)
+
+    def delete(self, request, profile_id):
+        if UserProfile.delete_by_id(profile_id):
+            return JsonResponse(status=200)
+        return HttpResponseBadRequest()
+    def put(self, request, profile_id):
+
+        data = json.loads(request.body)
+        profile = UserProfile.get_by_id(profile_id)
+        if profile_data_validator(data):
+            profile.update(**data)
+            return JsonResponse(profile.to_dict(), status=200)
+        return HttpResponseBadRequest()

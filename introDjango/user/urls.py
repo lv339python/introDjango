@@ -5,4 +5,5 @@ urlpatterns = [
     re_path(r'^$', get_user),
     re_path(r'^(?P<user_id>\d+)/$', get_user),
     re_path(r'^(?P<user_id>\d+)/profile/', include('user_profile.urls')),
+    re_path(r'^(?P<user_id>\d+)/profile/v1/', include('user_profile.urls')),
 ]
