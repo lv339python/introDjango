@@ -1,7 +1,14 @@
+import json
+
 from django.http import JsonResponse
 from .models import User
 
 def get_user(request, user_id=None):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        user = User(**data)
+        user.save()
+        return JsonResponse(user.to_dict(), status=201)
     print(user_id)
     if user_id:
         user = User.get_by_id(user_id)
